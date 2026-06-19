@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Defect Tracking System{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">
+      <div class="logo">DT</div>
+      <div>
+        <div class="brand-title">Defect Tracking System</div>
+        <div class="brand-subtitle">Student Registration System QA Tracker</div>
+      </div>
+    </a>
+    <nav class="nav">
+      <a class="{% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Dashboard</a>
+      <a class="{% if request.endpoint == 'report' %}active{% endif %}" href="{{ url_for('report') }}">Reports</a>
+      <a href="{{ url_for('api_defects') }}">API</a>
+      <a href="{{ url_for('export_csv') }}">Export CSV</a>
+      <a class="primary" href="{{ url_for('add') }}">+ Log Defect</a>
+    </nav>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    © 2026 Defect Tracking System. Prepared by <strong>Ruknuddin Asrari</strong> — Software Quality Engineer — The Career Insights Hub LLC.
+  </footer>
+</body>
+</html>

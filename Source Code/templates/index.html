@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Defect Tracking System{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <h1>Defect Dashboard</h1>
+    <div class="subtle">Track bug lifecycle, severity, priority, ownership, and status in one place.</div>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('add') }}">+ Log New Defect</a>
+</section>
+
+<section class="stats">
+  <div class="stat"><strong>{{ stats.total }}</strong><span>Total</span></div>
+  <div class="stat"><strong>{{ stats.by_status['Open'] }}</strong><span>Open</span></div>
+  <div class="stat"><strong>{{ stats.by_status['In Progress'] }}</strong><span>In Progress</span></div>
+  <div class="stat"><strong>{{ stats.by_status['Resolved'] }}</strong><span>Resolved</span></div>
+  <div class="stat"><strong>{{ stats.by_status['Closed'] }}</strong><span>Closed</span></div>
+  <div class="stat"><strong>{{ stats.by_severity['Critical'] }}</strong><span>Critical</span></div>
+</section>
+
+<form class="card filter" method="GET" action="{{ url_for('index') }}">
+  <input name="q" value="{{ q }}" placeholder="Search by Bug ID, title, module, or description">
+  <select name="status">
+    <option value="">All statuses</option>
+    {% for item in statuses %}<option value="{{ item }}" {% if status == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+  </select>
+  <select name="severity">
+    <option value="">All severities</option>
+    {% for item in severities %}<option value="{{ item }}" {% if severity == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+  </select>
+  <select name="module">
+    <option value="">All modules</option>
+    {% for item in modules %}<option value="{{ item }}" {% if module == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+  </select>
+  <button class="btn btn-primary" type="submit">Search</button>
+  <a class="btn btn-outline" href="{{ url_for('index') }}">Clear</a>
+</form>
+
+<section class="card">
+  <div class="card-header">
+    <h2>Defect Register</h2>
+    <span>{{ defects|length }} result{% if defects|length != 1 %}s{% endif %}</span>
+  </div>
+  <div class="table-wrap">
+    {% if defects %}
+    <table>
+      <thead>
+        <tr>
+          <th>Bug ID</th><th>Title / Module</th><th>Severity</th><th>Priority</th><th>Status</th><th>Assigned To</th><th>Reported</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in defects %}
+        <tr>
+          <td><span class="bug-id">{{ d.id }}</span></td>
+          <td><a class="title" href="{{ url_for('view', bug_id=d.id) }}">{{ d.title }}<small>{{ d.module }}</small></a></td>
+          <td><span class="badge sev-{{ d.severity }}">{{ d.severity }}</span></td>
+          <td><span class="badge pri-{{ d.priority }}">{{ d.priority }}</span></td>
+          <td><span class="badge sta-{{ d.status.replace(' ', '-') }}">{{ d.status }}</span></td>
+          <td>{{ d.assigned_to or 'Unassigned' }}</td>
+          <td>{{ d.date_reported }}</td>
+          <td>
+            <div class="actions">
+              <a class="btn btn-outline" href="{{ url_for('view', bug_id=d.id) }}">View</a>
+              <a class="btn btn-primary" href="{{ url_for('edit', bug_id=d.id) }}">Edit</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <div class="empty">No defects matched your search criteria.</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

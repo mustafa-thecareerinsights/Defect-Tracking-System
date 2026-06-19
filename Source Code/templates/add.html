@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Log Defect | Defect Tracking System{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <h1>Log New Defect</h1>
+    <div class="subtle">Bug ID is automatically assigned after submission.</div>
+  </div>
+  <a class="btn btn-outline" href="{{ url_for('index') }}">Back to Dashboard</a>
+</section>
+
+<section class="card card-pad">
+  <form method="POST" action="{{ url_for('add') }}">
+    <div class="form-grid">
+      <div class="form-group full"><label>Title *</label><input name="title" required maxlength="120" placeholder="Short defect title"></div>
+      <div class="form-group full"><label>Description</label><textarea name="description" placeholder="Describe the issue clearly"></textarea></div>
+      <div class="form-group"><label>Module</label><select name="module">{% for item in modules %}<option value="{{ item }}">{{ item }}</option>{% endfor %}</select></div>
+      <div class="form-group"><label>Severity</label><select name="severity">{% for item in severities %}<option value="{{ item }}">{{ item }}</option>{% endfor %}</select></div>
+      <div class="form-group"><label>Priority</label><select name="priority">{% for item in priorities %}<option value="{{ item }}">{{ item }}</option>{% endfor %}</select></div>
+      <div class="form-group"><label>Assigned To</label><input name="assigned_to" placeholder="Development Team"></div>
+      <div class="form-group"><label>Reported By</label><input name="reported_by" value="Ruknuddin Asrari"></div>
+      <div class="form-group full"><label>Steps to Reproduce</label><textarea name="steps_to_reproduce" placeholder="1. Open...&#10;2. Enter...&#10;3. Click..."></textarea></div>
+      <div class="form-group"><label>Expected Result</label><textarea name="expected_result"></textarea></div>
+      <div class="form-group"><label>Actual Result</label><textarea name="actual_result"></textarea></div>
+      <div class="form-group full"><label>Comments / Notes</label><textarea name="comments"></textarea></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">Log Defect</button>
+      <a class="btn btn-outline" href="{{ url_for('index') }}">Cancel</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

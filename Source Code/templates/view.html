@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ defect.id }} | Defect Tracking System{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <h1><span class="bug-id">{{ defect.id }}</span> {{ defect.title }}</h1>
+    <div class="subtle">{{ defect.module }} · Reported {{ defect.date_reported }} · Last updated {{ defect.date_updated }}</div>
+  </div>
+  <div class="actions">
+    <a class="btn btn-primary" href="{{ url_for('edit', bug_id=defect.id) }}">Edit</a>
+    <a class="btn btn-outline" href="{{ url_for('index') }}">Dashboard</a>
+  </div>
+</section>
+
+<section class="card card-pad">
+  <div class="actions" style="margin-bottom:20px; flex-wrap:wrap">
+    <span class="badge sev-{{ defect.severity }}">Severity: {{ defect.severity }}</span>
+    <span class="badge pri-{{ defect.priority }}">Priority: {{ defect.priority }}</span>
+    <span class="badge sta-{{ defect.status.replace(' ', '-') }}">Status: {{ defect.status }}</span>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-box"><label>Module</label><div class="value">{{ defect.module }}</div></div>
+    <div class="detail-box"><label>Assigned To</label><div class="value">{{ defect.assigned_to or 'Unassigned' }}</div></div>
+    <div class="detail-box"><label>Reported By</label><div class="value">{{ defect.reported_by }}</div></div>
+    <div class="detail-box"><label>Date Reported</label><div class="value">{{ defect.date_reported }}</div></div>
+    <div class="detail-box"><label>Last Updated</label><div class="value">{{ defect.date_updated }}</div></div>
+    <div class="detail-box"><label>Bug ID</label><div class="value">{{ defect.id }}</div></div>
+  </div>
+
+  <div style="height:20px"></div>
+  <div class="detail-grid">
+    <div class="detail-box" style="grid-column:1/-1"><label>Description</label><div class="value">{{ defect.description or 'No description provided.' }}</div></div>
+    <div class="detail-box"><label>Steps to Reproduce</label><div class="value">{{ defect.steps_to_reproduce or 'Not provided.' }}</div></div>
+    <div class="detail-box"><label>Expected Result</label><div class="value">{{ defect.expected_result or 'Not provided.' }}</div></div>
+    <div class="detail-box"><label>Actual Result</label><div class="value">{{ defect.actual_result or 'Not provided.' }}</div></div>
+    <div class="detail-box" style="grid-column:1/-1"><label>Comments / Notes</label><div class="value">{{ defect.comments or 'No comments added.' }}</div></div>
+  </div>
+</section>
+{% endblock %}
